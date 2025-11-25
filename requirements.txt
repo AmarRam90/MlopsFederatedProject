@@ -1,0 +1,9 @@
+torch
+pandas
+numpy
+gradio
+scikit-learn
+schedule
+seaborn
+matplotlib
+prometheus-client

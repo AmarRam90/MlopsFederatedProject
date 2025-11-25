@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  server:
+    build: .
+    command: python server.py
+    ports:
+      - "7860:7860"
+      - "8000:8000" # Expose metrics for local debugging if needed
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    restart: always
+
+  node-1:
+    build: .
+    command: python node.py
+    environment:
+      - NODE_ID=1
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    depends_on:
+      - server
+    restart: always
+
+  node-2:
+    build: .
+    command: python node.py
+    environment:
+      - NODE_ID=2
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    depends_on:
+      - server
+    restart: always
+
+  node-3:
+    build: .
+    command: python node.py
+    environment:
+      - NODE_ID=3
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    depends_on:
+      - server
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
