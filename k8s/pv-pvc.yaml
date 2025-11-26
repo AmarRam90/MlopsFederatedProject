@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fl-data-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/run/desktop/mnt/host/c/Users/DELL/OneDrive/Desktop/mlops@/federated-ops-project" # Adjust this path for your actual environment if not using Docker Desktop on Windows with this mount
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fl-data-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi

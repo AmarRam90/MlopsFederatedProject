@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fl-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fl-server
+  template:
+    metadata:
+      labels:
+        app: fl-server
+    spec:
+      containers:
+      - name: server
+        image: fl-app:latest
+        imagePullPolicy: IfNotPresent # Use local image
+        command: ["python", "server.py"]
+        ports:
+        - containerPort: 7860
+        - containerPort: 8000
+        volumeMounts:
+        - mountPath: /app/data
+          name: data-volume
+          subPath: data
+        - mountPath: /app/models
+          name: data-volume
+          subPath: models
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: fl-data-pvc

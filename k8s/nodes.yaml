@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fl-node-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fl-node-1
+  template:
+    metadata:
+      labels:
+        app: fl-node-1
+    spec:
+      containers:
+      - name: node
+        image: fl-app:latest
+        imagePullPolicy: IfNotPresent
+        command: ["python", "node.py"]
+        env:
+        - name: NODE_ID
+          value: "1"
+        volumeMounts:
+        - mountPath: /app/data
+          name: data-volume
+          subPath: data
+        - mountPath: /app/models
+          name: data-volume
+          subPath: models
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: fl-data-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fl-node-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fl-node-2
+  template:
+    metadata:
+      labels:
+        app: fl-node-2
+    spec:
+      containers:
+      - name: node
+        image: fl-app:latest
+        imagePullPolicy: IfNotPresent
+        command: ["python", "node.py"]
+        env:
+        - name: NODE_ID
+          value: "2"
+        volumeMounts:
+        - mountPath: /app/data
+          name: data-volume
+          subPath: data
+        - mountPath: /app/models
+          name: data-volume
+          subPath: models
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: fl-data-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fl-node-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fl-node-3
+  template:
+    metadata:
+      labels:
+        app: fl-node-3
+    spec:
+      containers:
+      - name: node
+        image: fl-app:latest
+        imagePullPolicy: IfNotPresent
+        command: ["python", "node.py"]
+        env:
+        - name: NODE_ID
+          value: "3"
+        volumeMounts:
+        - mountPath: /app/data
+          name: data-volume
+          subPath: data
+        - mountPath: /app/models
+          name: data-volume
+          subPath: models
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: fl-data-pvc
